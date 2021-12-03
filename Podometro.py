@@ -1,9 +1,27 @@
 import math
 import requests
 import numpy as np
+import json
+import os
+from datetime import datetime
 
 
 windowSize = 20
+
+bpmAPIbaseURL = "https://api.getsongbpm.com"
+
+
+def getSognsBPM(bpm, api_key):
+    #Check if the API key is valid
+    state = requests.get("https://api.getsongbpm.com/?api_key=4a45338f3b72c92981ea4c26c94ebf61")
+    if(not state.ok):
+        print("Error al conectarse a la API")
+        return "Error"
+    
+    #Get the data
+    song_data = requests.get("https://api.getsongbpm.com/tempo/?api_key=4a45338f3b72c92981ea4c26c94ebf61&{bpm}")
+
+    
 
 def numpy_ewma_vectorized_v2(data, window):
 
@@ -75,13 +93,22 @@ def calculateSteps(length, stepData, ewma):
 
     return steps
 
+
 timestamps = []
 steps_data = []
 ewma = []
 num_steps = 0
 
-while True:
+startTime = datetime.now()
+currTime = startTime
 
+with open(os.path.join(os.getcwd(), 'secrets.json')) as secrets:
+    j = json.load(secrets)
+        
+bpm_api_key = j['BinanceAPI']
+
+
+while True:
     res = requests.get('http://192.168.1.27:8080/sensors.json')
     data = res.json().get('accel').get('data')
 
@@ -102,4 +129,17 @@ while True:
     timestamps = timestamps[-1000:]
 
 
+    totalSecs = (currTime - startTime).total_seconds()
+    #Rounds to tens of units
+    bpm = round(60*(num_steps/totalSecs), -1)
+
+    #TODO
+    #-When the bpm has been constant for a while, lock it un til th user stops
+    #-Have to option to set the bpm manually
+    #-Music genre?
+    #-Randomize the songs to show
+
+
+
     print("NUM STEPS: ", num_steps)
+    print("BPM", bpm)
