@@ -7,6 +7,7 @@ from datetime import datetime
 
 
 windowSize = 20
+step_length = 0.7 #In meters
 
 bpmAPIbaseURL = "https://api.getsongbpm.com"
 
@@ -133,13 +134,19 @@ while True:
     #Rounds to tens of units
     bpm = round(60*(num_steps/totalSecs), -1)
 
+  
+
+    distance = (step_length * num_steps) / 1000
+    pace = distance / (totalSecs / 60)
+    
+    print("NUM STEPS: ", num_steps)
+    print("Total distance: ", step_length * num_steps)
+    print("Pace: ", pace , " km/min")
+    print("BPM", bpm)
+
+
     #TODO
     #-When the bpm has been constant for a while, lock it un til th user stops
     #-Have to option to set the bpm manually
     #-Music genre?
     #-Randomize the songs to show
-
-
-
-    print("NUM STEPS: ", num_steps)
-    print("BPM", bpm)
