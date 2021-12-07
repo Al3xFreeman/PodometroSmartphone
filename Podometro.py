@@ -1,9 +1,12 @@
 import math
 import requests
 import numpy as np
+from datetime import datetime
+import math
 
 
 windowSize = 20
+step_length = 0.7
 
 def numpy_ewma_vectorized_v2(data, window):
 
@@ -80,6 +83,8 @@ steps_data = []
 ewma = []
 num_steps = 0
 
+startTime = datetime.now()
+
 while True:
 
     res = requests.get('http://192.168.1.27:8080/sensors.json')
@@ -101,5 +106,13 @@ while True:
     timestamps += ts_add
     timestamps = timestamps[-1000:]
 
+    currTime = datetime.now()
+    totalSecs = (currTime - startTime).total_seconds()
+    #Rounds to tens of units
+    bpm = round(60*(num_steps/totalSecs), -1)
 
-    print("NUM STEPS: ", num_steps)
+
+    distance = round((step_length * num_steps) / 1000, 3)
+    pace = round((totalSecs / 60) / (distance + 0.01), 2)
+    
+    print("Total distance: ", '{:<8}'.format(str(distance) + " Km"), " |||  Pace: ", '{:<13}'.format(str(pace) + " min/km"), " |||  BPM",  '{:<5}'.format(str(bpm)), " ||| NUM STEPS: ",  '{:<5}'.format(str(num_steps)), " ||| Total time: ", str(datetime.now() - startTime).split('.')[0])
