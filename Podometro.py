@@ -8,6 +8,7 @@ import math
 windowSize = 20
 step_length = 0.7
 
+#https://stackoverflow.com/questions/42869495/numpy-version-of-exponential-weighted-moving-average-equivalent-to-pandas-ewm
 def numpy_ewma_vectorized_v2(data, window):
 
     alpha = 2 /(window + 1.0)
