@@ -1,1 +1,1 @@
-https://docs.google.com/viewer?url=${https://drive.google.com/file/d/1AWtTURcaHTKHfLhZK8HNhUWOHWF5oG4H/view?usp=sharing}
+https://drive.google.com/file/d/1AWtTURcaHTKHfLhZK8HNhUWOHWF5oG4H/view?usp=sharing
